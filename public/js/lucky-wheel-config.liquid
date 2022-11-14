@@ -1,0 +1,488 @@
+
+{% include 'lucky' %}
+{{ 'main.css' | asset_url | stylesheet_tag }}
+{{ 'typo.css' | asset_url | stylesheet_tag }}
+{{ 'hc-canvas-luckwheel.css' | asset_url | stylesheet_tag }}
+{{ 'hc-canvas-luckwheel.js' | asset_url | script_tag }}
+{{ 'main.js' | asset_url | script_tag }}
+
+<style type="text/css">
+  .blockCssClass{
+      pointer-events: block;
+  }
+  .noneCssClass{
+      pointer-events: none;
+  }
+</style>
+        <!----------- MODAL --------->
+<script type="text/template" id="tpl-html">
+      <% _.each( target, function(i) { %>
+   <div id="button" class="desc modal-btn" style="display:none;">
+        <div class="trigger-main-content" id="btfBtn">
+              <div data-name="newTrigger" data-text="newTrigger" class="trigger-main-text"><%= i.title_simple %></div>
+              <div data-name="subTrigger" data-text="subTrigger" class="trigger-sub-text"><%= i.title_sub %></div>
+              <div class="trigger-timer-content" style="display: block;">
+                  <div data-name="activateWithin" data-text="activateWithin" class="trigger-bottom-text"><%= i.active_within %></div>
+                  <div data-name="counterTimerMinutes" data-text="counterTimerMinutes" class="trigger-bottom-timer">
+                  <span id="time"></span>
+                  </div>
+              </div>
+        </div>
+      </div>
+
+      <style>
+        .trigger-main-content {
+          display: inline-block;
+          padding: 0;
+          width: 140px;
+          height: 140px;
+          color: <%= i.colorText %>;
+          background: <%= i.colorBackground %> !important;
+          cursor: pointer!important;
+          font-family: "Roboto", sans-serif!important;
+          z-index: 999999;
+          -webkit-transform: translate(0%, -50%);
+          transform: translate(0%, -50%);
+          border-radius: 50%;
+          box-shadow: 3px 3px 3px 0 #555;
+          border-style: solid;
+          border-color: #fff;
+          border-width: 6px;
+          top: 610px;
+          position: fixed;
+          z-index: 100;
+          right: 0;
+      }
+      </style>
+      <% }); %>
+ </script>
+<div id="output"></div>
+<script>
+      var isPercentage = true;
+      var luckyConfigText = JSON.parse(document.getElementById('magepow_config_wheel_laravel_app').textContent);
+  	  var data = [luckyConfigText['configall']['trigger']];
+        var test = { target:data };
+            var template = _.template( $("#tpl-html").text() );
+            $("#output").html( template(test) );
+</script>
+
+
+<!-- COUNTER TIMER -->
+<script type="text/javascript">
+      var isPercentage = true;
+      var luckyConfigText = JSON.parse(document.getElementById('magepow_config_wheel_laravel_app').textContent);
+  	  var birthdaytime = luckyConfigText['configall']['trigger']['birthdaytime'];
+  // Set the date we're counting down to
+  var countDownDate = new Date( birthdaytime ).getTime();
+
+  // Update the count down every 1 second
+  var x = setInterval(function() {
+
+    // Get today's date and time
+    var now = new Date().getTime();
+
+    // Find the distance between now and the count down date
+    var distance = countDownDate - now;
+
+    // Time calculations for days, hours, minutes and seconds
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    // Output the result in an element with id="demo"
+   document.getElementById("time").innerHTML = days + "d " + hours + "h "
+    + minutes + "m " + seconds + "s ";
+
+    // If the count down is over, write some text
+    if (distance < 0) {
+     clearInterval(x);
+    document.getElementById("button").style = "display:none";
+   }
+  }, 1000);
+</script>
+  <!------- end modal -------->
+
+
+<div id="myModal" class="modal">
+    <span class="close">&times;</span>
+  <script src="{{ 'hc-canvas-luckwheel.js' | asset_url }}" defer="defer"></script>
+    <script>
+      var isPercentage = true;
+      var luckyConfigText = JSON.parse(document.getElementById('magepow_config_wheel_laravel_app').textContent);
+		  var data = luckyConfigText['configall']['coupons'];
+            var prizes = [
+
+            ];
+            for (var i = 0; i < data.length; i++) {
+              var str = "{{'image' | asset_url }}";
+              var special1 = data[i].image;
+              var result_img = str.replace('image',special1);
+              prizes.push(
+                {
+                  text: data[i]['name'],
+                  img: result_img,
+                  number: 1,
+                  percentpage:  data[i]['chance']
+                },
+              );
+            }
+            var arrValues = [];
+            document.addEventListener(
+              "DOMContentLoaded",
+              function() {
+                hcLuckywheel.init({
+                  id: "luckywheel",
+                  config: function(callback) {
+                    callback &&
+                      callback(prizes);
+                  },
+                  mode : "both",
+                  getPrize: function(callback) {
+                    var rand = randomIndex(prizes);
+                    var chances = rand;
+                    callback && callback([rand, chances]);
+                  },
+                  gotBack: function(data) {
+                    if(data == null){
+                      Swal.fire(
+                        'THE PROGRAM ENDS',
+                        'THE REWARD IS OVER',
+                        'error'
+                      )
+                    }
+                     else if (data == 'WISH YOU LUCK NEXT TIME'){
+                      Swal.fire(
+                        'WISH YOU LUCK NEXT TIME',
+                        data,
+                        'error'
+                      )
+                    }
+                     else{
+                      Swal.fire(
+                        'CONGRATULATION ON WINNING THE PRIZE!',
+                        data,
+                        'success'
+                      )
+                    }
+                  }
+                });
+              },
+              false
+            );
+            function randomIndex(prizes){
+              if (typeof arrValues !== 'undefined' && arrValues.length === 0) {
+                prizes.forEach((item, index)=>{
+                  num = item.percentpage;
+                  for(var i=0; i<num; i++){
+                    arrValues.push(index);
+                  };
+                });
+              }
+              randomIdx = Math.floor(Math.random()*arrValues.length)
+              type = arrValues[randomIdx]
+              delete arrValues[randomIdx];
+              return type
+            }
+          </script>
+          <div class="content2">
+            <div class="wrapper typo" id="wrapper">
+              <section id="luckywheel" class="hc-luckywheel">
+                    <div class="hc-luckywheel-container">
+                      <canvas class="hc-luckywheel-canvas" width="500px" height="500px"
+                        >Vòng Xoay May Mắn</canvas>
+                    </div>
+                    <a class="hc-luckywheel-btn" href="javascript:;" id="luck" onclick="myfns()">SPIN</a>
+                </section>
+              </div>
+          </div>
+
+
+          <!---------------- CONTENT --------------->
+
+<script type="text/template" id="text-html">
+  <% _.each( targetText, function(i) { %>
+      <div class="ct-luckywheel">
+        <div class="conntent-luckywheel">
+        <div class="content-wheel">
+            <h1 style="font-family:<%= i.desktopfirst.font %>;font-size: <%= i.desktopfirst.size %>px;" id="lbldesktopfirst" class="lbldesktopfirst desktopfirst"><%= i.desktopfirst.text %></h1>
+            <p style="font-family:<%= i.desktopsecond.font %>;font-size: <%= i.desktopsecond.size %>px;" id="lbldesktopsecond" class="desktopsecond"><%= i.desktopsecond.text %></p>
+            <!-- <form id="productForm" name="productForm" class="form-horizontal"> -->
+                <div class="form-group">
+                  <input type="email" class="form-control" id="email" style="width:50%;height: 44px; font-size: larger;" placeholder="Enter email">
+                </div>
+                <button id="buttonname" class="launcher" data-text="startScreen.button" onclick="myfns()">
+                      <p id="buttontext" style="font-family:<%= i.button_name.font %>;font-size: <%= i.button_name.size %>px;"><%= i.button_name.text %></p>
+                </button>
+            <!-- </form> -->
+            <p id="lbldisclaimerText" style="font-family:<%= i.content_name.font %>;font-size: <%= i.content_name.size %>px;margin-top: 5px;font-weight: 500;text-align: left;padding: 15px 0 0;text-decoration-line: none;opacity: 0.8;color: <%= i.disclaimerText %>;">
+            <%= i.content_name.text %>
+            </p>
+        </div>
+        </div>
+      </div>
+<% }); %>
+</script>
+
+
+
+<!-- save mail -->
+<script type="text/javascript">
+ // $(function () {
+  //  $.ajaxSetup({
+  //        headers: {
+  //            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  //        }
+  //  });
+//
+  //  $('#buttonname').click(function (e) {
+  //      e.preventDefault();
+  //      $(this).html('Sending..');
+//
+  //      $.ajax({
+  //        data: $('#productForm').serialize(),
+  //        url: "{{ route('/store') }}",
+  //        type: "POST",
+  //        dataType: 'json',
+  //        success: function (data) {
+//
+  //            $('#productForm').trigger("reset");
+  //            table.draw();
+//
+  //        },
+  //        error: function (data) {
+  //            console.log('Error:', data);
+  //            $('#buttonname').html('Save Changes');
+  //        }
+  //    });
+  //  });
+//
+  //});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+      var isPercentage = true;
+      var luckyConfigText = JSON.parse(document.getElementById('magepow_config_wheel_laravel_app').textContent);
+  	  var data = luckyConfigText['configall']['setting'];
+  var count = 0;
+  function myfns(){
+  count++;
+  if (count = data['frequency']){
+  document.getElementById("buttonname").disabled = true;
+    $(document).find('#luck').addClass('noneCssClass');
+  }
+  }
+</script>
+
+<!-- value input email click button -->
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.launcher').attr('disabled',true);
+    $('#luck').addClass('noneCssClass').removeClass('blockCssClass');
+    $(document).on('keyup', '#email', function(e) {
+     if($(this).val() != 0){
+         $('.launcher').removeAttr('disabled');
+         $('#luck').addClass('blockCssClass').removeClass('noneCssClass');
+     }
+     else
+     {
+         $('.launcher').attr('disabled', true);
+         $('#luck').addClass('noneCssClass').removeClass('blockCssClass');
+     }
+    })
+});
+</script>
+
+      <div id="textContent"></div>
+      <script>
+            var isPercentage = true;
+            var luckyConfigText = JSON.parse(document.getElementById('magepow_config_wheel_laravel_app').textContent);
+            var text = [luckyConfigText['configall']['text']];
+              var testText = { targetText:text };
+                  var template = _.template( $("#text-html").text() );
+                  $("#textContent").html( template(testText) );
+      </script>
+      <!--------------- end content ------------>
+
+
+      <!---------------- COLOR --------------->
+      <script type="text/template" id="color-html">
+        <style>
+        <% _.each( targetColor, function(i) { %>
+          h1#lbldesktopfirst{
+              font-size: 40px;
+              font-weight: 700;
+              color: <%= i.converText %>;
+            }
+            .hc-luckywheel {
+              position: fixed;
+              width: 500px;
+              height: 500px;
+              border-radius: 50%;
+              z-index: 1;
+              border: 16px solid <%= i.background %>;
+              box-shadow: 0 2px 3px #333, 0 0 2px #000;
+              margin-top: 110px;
+              left: -200px;
+            }
+            button#buttonname {
+              height: 40px;
+              width: auto;
+              min-width: 247px;
+              margin: 0;
+              padding: 0;
+              font-weight: 800;
+              font-size: 18px;
+              line-height: 17px!important;
+              text-align: center;
+              letter-spacing: 1px;
+              background: <%= i.buttonColor %>;
+              color: <%= i.buttonText %>;
+              box-shadow: 7px 6px 0 0 <%= i.buttonShadow %>;
+              outline: none;
+          }
+
+            .conntent-luckywheel {
+                  margin-left: 511px;
+                  width: 791px;
+                  position: fixed;
+                  margin-top: 67px;
+                  height: 400px;
+                  background-color: <%= i.contentBgr %>;
+                  border-radius: 13%;
+                  box-shadow: 1px 1px 1px 5px <%= i.contentshadow %>;
+              }
+            .content-wheel {
+              width: 484px;
+              margin-left: 289px;
+              margin-top: 33px;
+            }
+
+        <% }); %>
+        </style>
+      </script>
+          <div id="textColor"></div>
+    <script>
+                var isPercentage = true;
+                var luckyConfigText = JSON.parse(document.getElementById('magepow_config_wheel_laravel_app').textContent);
+                var color = [luckyConfigText['configall']['color']];
+                  var testColor = { targetColor:color };
+                      var template = _.template( $("#color-html").text() );
+                      $("#textColor").html( template(testColor) );
+    </script>
+<!-- end-color -->
+</div>
+
+<!-- // leftright modal -->
+<script>
+
+var isPercentage = true;
+  var luckyConfigText = JSON.parse(document.getElementById('magepow_config_wheel_laravel_app').textContent);
+  var rightleft = luckyConfigText['configall']['trigger']['triggerPosition'];
+  setTimeout(function(){
+  var $btfBtn = $("#btfBtn");
+      localStorage.setItem('lk-css', rightleft);
+      if (rightleft == 'right') {
+        $btfBtn.addClass('rightCssClass').removeClass('leftCssClass');
+      } else if (rightleft == 'left') {
+        $btfBtn.addClass('leftCssClass').removeClass('rightCssClass');
+      }
+    if(localStorage.getItem('lk-css') != null){
+          if(localStorage.getItem('lk-css') == 'right'){
+              $('input[name="triggerPosition"][value="right"]').attr('checked', true);
+              $('#btfBtn').addClass('rightCssClass').removeClass('leftCssClass');
+          }else{
+              $('#btfBtn').addClass('leftCssClass').removeClass('rightCssClass');
+          }
+      }
+    }, 2000);
+  </script>
+<!-- show hide modal timeout -->
+<script>
+      var isPercentage = true;
+      var luckyConfigText = JSON.parse(document.getElementById('magepow_config_wheel_laravel_app').textContent);
+  	  var data = luckyConfigText['configall']['setting'];
+      var d = new Date();
+      var dayOfWeek = d.getDay();
+      var hour = d.getHours();
+      var mins = d.getMinutes();
+      var status = 'open';
+      if (dayOfWeek !==  data['day_hide']  && hour >=  data['start_time']  && hour < data['end_time'] ){
+          if (hour=='0' && mins < '10'){
+              status = 'closed';
+          }else{
+              status = 'open';
+          }
+      }else{
+          status = 'closed';
+      }
+      if (status=='open') {
+          $('.modal-btn').show();
+      }else{
+          $('.modal-btn').hide();
+      }
+</script>
+
+<!-- show-hide-content-modal -->
+<script>
+  var modal = document.getElementById("myModal");
+  var btn = document.getElementById("btfBtn");
+  var span = document.getElementsByClassName("close")[0];
+  btn.onclick = function() {
+    modal.style.display = "block";
+  }
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+  </script>
+
+
+
+
+ <!-- show-hide-modal -->
+<script>
+    var luckyConfigText = JSON.parse(document.getElementById('magepow_config_wheel_laravel_app').textContent);
+      var showhide = luckyConfigText['configall']['trigger']['showPlayGameTrigger'];
+      setTimeout(function(){
+         var $btfBtnn = $("#btfBtnn");
+          localStorage.setItem('lk', showhide);
+            if (showhide == 'show') {
+              $btfBtnn.addClass('showCssClass').removeClass('hideCssClass');
+            } else if (showhide == 'hide') {
+              $btfBtnn.addClass('hideCssClass').removeClass('showCssClass')
+            }
+          if(localStorage.getItem('lk') != null){
+                if(localStorage.getItem('lk') == 'show'){
+                    $('input[name="showPlayGameTrigger"][value="show"]').attr('checked', true);
+                    $('#btfBtn').show();
+                }else{
+                    $('#btfBtn').hide();
+                }
+            }
+          });
+</script>
+
+
+
+
+
+
+

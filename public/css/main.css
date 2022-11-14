@@ -1,0 +1,316 @@
+
+div#wrapper {
+    position: absolute;
+    top: 10px;
+    left: 620px;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+    background-image: url(bg_lk.png);
+
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 4.5rem;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+p#curve {
+    font-size: 15px;
+}
+
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+  }
+
+  .active, .accordion:hover {
+    background-color: #ccc;
+  }
+
+  .accordion:after {
+    content: '\002B';
+    color: #777;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+  }
+
+
+
+  .panel {
+    padding: 0 18px;
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+  }
+
+/* admin */
+  .container.trigger-lk {
+    background: white;
+}
+.box{
+    color: black;
+    padding: 20px;
+    display: none;
+    margin-top: 20px;
+}
+#myBtn.leftCssClass {
+    left: 0;
+  }
+
+  #myBtn.rightCssClass {
+   right: 0;
+  }
+  #myBtn.hideCssClass{
+    display: none;
+  }
+
+  #myBtn.showCssClass {
+    display: block;
+  }
+  #btfBtn.leftCssClass {
+    left: 0;
+  }
+
+  #btfBtn.rightCssClass {
+   right: 0;
+  }
+  #btfBtn.hideCssClass{
+    display: none;
+  }
+
+  #btfBtn.showCssClass {
+    display: block;
+  }
+    .trigger-main-content .trigger-main-text {
+        font-family: "Roboto", sans-serif !important;
+        text-align: center;
+        font-size: 21px;
+        font-weight: 900;
+        margin: 35px 5px 0 5px;
+        line-height: 22px;
+        /* color: #fff; */
+    }
+    .trigger-main-content .trigger-sub-text {
+        font-family: "Roboto", sans-serif !important;
+        text-align: center;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: normal !important;
+        /* color: #fff; */
+    }
+
+.trigger-timer-content {
+display: inline-block;
+padding: 0;
+width: 120px;
+height: 50px;
+color: #fff;
+background: #24aef0 !important;
+cursor: pointer!important;
+line-height: normal!important;
+font-family: "Roboto", sans-serif !important;
+z-index: 999999;
+position: absolute;
+bottom: -17px;
+left: 7px;
+}
+.trigger-timer-content .trigger-bottom-text {
+  font-family: "Roboto", sans-serif!important;
+  margin: 5px 3px 0 3px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+.trigger-timer-content .trigger-bottom-timer {
+  font-family: "Roboto", sans-serif!important;
+  margin: 1px 3px 3px 3px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+}
+li.list-group-item {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.color-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+button.btn.btn-primary {
+    height: 40px;
+    width: 100px;
+    font-size: larger;
+    font-weight: 700;
+    margin-top: 10px;
+}
+
+button#update:hover {
+    background: red;
+    color: black;
+}
+
+span#time {
+  font-size: small;
+}
+
+
+
+
+.hc-luckywheel {
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  margin-top: 67px;
+  z-index: 1;
+  margin-left: 480px;
+  border: 16px solid {{ $config->color->background}};
+  box-shadow: 0 2px 3px #333, 0 0 2px #000;
+}
+
+.conntent-luckywheel {
+  width: 742px;
+  position: fixed;
+  margin-left: 277px;
+  margin-top: 40px;
+  background-color: {{ $config->color->contentBgr}};
+  border-radius: 13%;
+  box-shadow: 1px 1px 1px 5px {{ $config->color->contentshadow}};
+}
+
+.content-wheel {
+  width: 427px;
+  margin-left: 300px;
+}
+
+.hc-luckywheel-item {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  color: {{ $config->color->cupponText }};
+  font-weight: bold;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6);
+}
+
+button#buttonname {
+    height: 40px;
+    margin-top: 13px;
+    width: auto;
+    min-width: 247px;
+    margin: 0;
+    padding: 0;
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 17px!important;
+    text-align: center;
+    letter-spacing: 1px;
+    background: {{ $config->color->buttonColor }};
+    color: {{ $config->color->buttonText }};
+    box-shadow: 7px 6px 0 0 {{ $config->color->buttonShadow }};
+    outline: none;
+    font-family: {{$config->text->button_name->font}};
+    font-size: {{$config->text->button_name->size}}px";
+}
+}
+button#myBtn {
+    background: {{ $config->trigger->colorBackground }};
+    color: {{ $config->trigger->colorText }};
+    font-size: initial;
+    transform: rotate(-90deg);
+    font-weight: 800;
+    top: 490px;
+    position: fixed;
+    z-index: 100;
+    padding: 5px 10px 5px 10px;
+}
+button#myBtn {
+        background: {{ $config->trigger->colorBackground }};
+        color: {{ $config->trigger->colorText }};
+        font-size: initial;
+        transform: rotate(-90deg);
+        font-weight: 800;
+        top: 490px;
+        position: fixed;
+        z-index: 100;
+        padding: 5px 10px 5px 10px;
+    }
+
+.trigger-main-content {
+  display: inline-block;
+  padding: 0;
+  width: 140px;
+  height: 140px;
+  color: {{ $config->trigger->colorText }};
+  background: {{ $config->trigger->colorBackground }} !important;
+  cursor: pointer!important;
+  font-family: "Roboto", sans-serif!important;
+  z-index: 999999;
+  -webkit-transform: translate(0%, -50%);
+  transform: translate(0%, -50%);
+  border-radius: 50%;
+  box-shadow: 3px 3px 3px 0 #555;
+  border-style: solid;
+  border-color: #fff;
+  border-width: 6px;
+  top: 490px;
+  position: fixed;
+  z-index: 100;
+}
+p#lbldesktopsecond {
+font-size: initial;
+font-family: {{$config->text->desktopsecond->font}};
+font-size: {{$config->text->desktopsecond->size}}px";
+}
+
+
